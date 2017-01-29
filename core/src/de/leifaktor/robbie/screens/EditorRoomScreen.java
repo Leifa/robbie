@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
+import com.badlogic.gdx.Input.Buttons;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.InputAdapter;
 
@@ -17,6 +18,7 @@ import de.leifaktor.robbie.data.entities.Entity;
 import de.leifaktor.robbie.data.tiles.Tile;
 import de.leifaktor.robbie.gfx.EntityPaletteRenderer;
 import de.leifaktor.robbie.gfx.RoomRenderer;
+import de.leifaktor.robbie.gfx.TileGraphics;
 import de.leifaktor.robbie.gfx.TilePaletteRenderer;
 
 public class EditorRoomScreen implements Screen {
@@ -30,17 +32,21 @@ public class EditorRoomScreen implements Screen {
     RobbieMain game;
     EditorSelectionData data;
 
-    Tile selectedTile;
+    Tile selectedTileLeft;
+    Tile selectedTileRight;
     Entity selectedEntity;
+    boolean leftMouseButtonPressed;
+    
+    int brushSize = 1;
 
     boolean tilePaletteActive = true;
 
     final int RENDER_ROOM_X = 0;
     final int RENDER_ROOM_WIDTH = 800;
-    final int RENDER_PALETTE_X = 900;
-    final int RENDER_PALETTE_Y = 700;
+    final int RENDER_PALETTE_X = 840;
+    final int RENDER_PALETTE_Y = 630;
     final int PALETTE_TILESIZE = 32;
-    final int PALETTE_TILES_PER_ROW = 8;
+    final int PALETTE_TILES_PER_ROW = 10;
 
     Position mousePosition;
 
@@ -76,6 +82,8 @@ public class EditorRoomScreen implements Screen {
             }
 
             public boolean touchDown(int screenX, int screenY, int pointer, int button) {
+                if (button == Buttons.LEFT) leftMouseButtonPressed = true;
+                if (button == Buttons.RIGHT) leftMouseButtonPressed = false;                
                 processClickAt(screenX, screenY);
                 return true;
             }
@@ -88,7 +96,11 @@ public class EditorRoomScreen implements Screen {
             public void processClickAt(int screenX, int screenY) {
                 if (screenX >= RENDER_PALETTE_X) { // PALETTE GEKLICKT
                     if (tilePaletteActive) {
-                        selectedTile = tilePaletteRenderer.getTile(screenX, Gdx.graphics.getHeight() - screenY);
+                        if (leftMouseButtonPressed) {
+                            selectedTileLeft = tilePaletteRenderer.getTile(screenX, Gdx.graphics.getHeight() - screenY);
+                        } else {
+                            selectedTileRight = tilePaletteRenderer.getTile(screenX, Gdx.graphics.getHeight() - screenY);
+                        }                        
                     } else {
                         selectedEntity = entityPaletteRenderer.getEntity(screenX, Gdx.graphics.getHeight() - screenY);
                     }
@@ -96,7 +108,17 @@ public class EditorRoomScreen implements Screen {
                     Position p = roomRenderer.getClickPosition(screenX, Gdx.graphics.getHeight() - screenY);
                     if (p != null) {
                         if (tilePaletteActive) {
-                            data.layer.setTile(p.x, p.y, selectedTile);
+                            for (int i = p.x - brushSize + 1; i <= p.x + brushSize - 1; i++) {
+                                for (int j = p.y - brushSize + 1; j <= p.y + brushSize - 1; j++) {
+                                    if (i >= 0 && i < data.layer.getWidth() && j >= 0 && j < data.layer.getHeight()) {
+                                        if(leftMouseButtonPressed) {
+                                            data.layer.setTile(i, j, selectedTileLeft);
+                                        } else {
+                                            data.layer.setTile(i, j, selectedTileRight);
+                                        }                                        
+                                    }                                    
+                                }
+                            }                            
                         } else {
                             data.layer.clearEntitiesAt(p.x, p.y);
                             if (selectedEntity != null) {
@@ -143,6 +165,9 @@ public class EditorRoomScreen implements Screen {
             roomRenderer.setGrayLayers(!roomRenderer.getGrayLayers());
         } else if (Gdx.input.isKeyJustPressed(Keys.P)) {
             tilePaletteActive = !tilePaletteActive;
+        } else if (Gdx.input.isKeyJustPressed(Keys.B)) {
+            brushSize++;
+            if (brushSize == 4) brushSize = 1;
         }
         if (data.room != null) {
             roomRenderer.render(batch);
@@ -159,6 +184,7 @@ public class EditorRoomScreen implements Screen {
         game.font.draw(batch, "PAGE: choose layer", 430, 785);
         game.font.draw(batch, "T: transparency", 630, 785);
         game.font.draw(batch, "P: switch palette", 830, 785);
+        game.font.draw(batch, "B: brush size = " + ((2*brushSize)-1), 830, 765);
         game.font.draw(batch,
                 "Layer " + 
                         (data.room.getLayers().indexOf(data.layer)+1) + 
@@ -167,7 +193,17 @@ public class EditorRoomScreen implements Screen {
                         30,
                         700);
         if (mousePosition != null) {
-            game.font.draw(batch, "(" + mousePosition.x + ", " + mousePosition.y + ")", 30, 680);
+            game.font.draw(batch,
+                    "(" + mousePosition.x + ", " + mousePosition.y + ") : "
+                    + data.layer.getTiles()[mousePosition.x + data.room.getWidth()*mousePosition.y],
+                    30,
+                    680);
+        }
+        if (selectedTileLeft != null) {
+            batch.draw(TileGraphics.getTexture(selectedTileLeft), 900, 650, 64, 64);
+        }
+        if (selectedTileRight != null) {
+            batch.draw(TileGraphics.getTexture(selectedTileRight), 970, 650, 64, 64);
         }        
         batch.end();
         shapeRenderer.begin(ShapeType.Line);

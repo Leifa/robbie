@@ -35,7 +35,11 @@ public class IO {
            json.writeValue("height", layer.getHeight());
            json.writeArrayStart("tiles");
            for (int i = 0; i < layer.getTiles().length; i++) {
-               json.writeValue(layer.getTiles()[i].getType());
+               if (layer.getTiles()[i] != null) {
+                   json.writeValue(layer.getTiles()[i].getType());
+               } else { // if for some reason some tiles are null, write transparent tiles instead
+                   json.writeValue(Tile.transparent.getType());
+               }
            }
            json.writeArrayEnd();
            json.writeArrayStart("entities");

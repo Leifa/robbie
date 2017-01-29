@@ -18,6 +18,7 @@ public class TileGraphics {
     public static TextureRegion[] doors;
     public static TextureRegion[] forest;
     public static TextureRegion[] pyramid;
+    public static TextureRegion glass;
     // ENTITIES
     public static TextureRegion gold;
     public static TextureRegion[] arrows;
@@ -89,6 +90,7 @@ public class TileGraphics {
         pyramid[6] = tileset.getTextureRegion(6, 9);
         pyramid[7] = tileset.getTextureRegion(7, 9);
         pyramid[8] = tileset.getTextureRegion(8, 9);
+        glass = tileset.getTextureRegion(13, 11);
         
         // ENTITIES
         gold = tileset.getTextureRegion(1, 10);
@@ -178,6 +180,7 @@ public class TileGraphics {
             case 50: t = pyramid[6]; break;
             case 51: t = pyramid[7]; break;
             case 52: t = pyramid[8]; break;
+            case 53: t = glass; break;
             }
         }
         return t;
@@ -212,7 +215,7 @@ public class TileGraphics {
             case 22: t = keys[14]; break;
             case 23: t = keys[15]; break;
             }
-        }        
+        }
         return t;
     }
     

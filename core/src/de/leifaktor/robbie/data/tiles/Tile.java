@@ -57,6 +57,7 @@ public abstract class Tile {
     public static Tile pyramid_sw = new Pyramid(50,6);
     public static Tile pyramid_s = new Pyramid(51,7);
     public static Tile pyramid_se = new Pyramid(52,8);
+    public static Tile glass = new WalkableTile(53);
     
     
     protected int id;
@@ -73,6 +74,10 @@ public abstract class Tile {
     
     public static Tile get(int id) {
         return tiles[id];
+    }
+    
+    public String toString() {
+        return "" + this.id;
     }
 
 }
