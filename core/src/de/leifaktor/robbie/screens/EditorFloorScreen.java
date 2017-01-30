@@ -3,6 +3,7 @@ package de.leifaktor.robbie.screens;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.Input.Keys;
+import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
@@ -13,7 +14,7 @@ import de.leifaktor.robbie.data.Room;
 import de.leifaktor.robbie.data.RoomFactory;
 import de.leifaktor.robbie.gfx.RoomRenderer;
 
-public class EditorFloorScreen implements Screen {
+public class EditorFloorScreen implements Screen, InputProcessor {
 
     // lower left corner of the lower left room (drawing coordinates)
     int x;
@@ -46,6 +47,7 @@ public class EditorFloorScreen implements Screen {
             data.roomSelectorX = 0;
             data.roomSelectorY = 0;
         }
+        Gdx.input.setInputProcessor(this);
     }
     
     private void setRectSize(int height) {
@@ -59,57 +61,7 @@ public class EditorFloorScreen implements Screen {
         Gdx.gl.glClearColor(0.3f, 0.3f, 0.3f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-        if (Gdx.input.isKeyJustPressed(Keys.ESCAPE)) {
-            game.setScreen(new EditorFloorsScreen(game, data));
-            return;
-        } else if (Gdx.input.isKeyJustPressed(Keys.ENTER)) {
-            if (data.floor.getRoom(data.roomSelectorX, data.roomSelectorY) == null) {
-                Room r = RoomFactory.wallRoom(data.episode.getRoomWidth(), data.episode.getRoomHeight());
-                data.floor.setRoom(data.roomSelectorX, data.roomSelectorY, r);                
-            }
-            data.room = data.floor.getRoom(data.roomSelectorX, data.roomSelectorY);
-            game.setScreen(new EditorRoomScreen(game, data));
-            return;
-        } else if (Gdx.input.isKeyJustPressed(Keys.DOWN)) {
-            if (data.roomSelectorY == data.floor.getHeight()-1) data.floor.expandSouth();
-            data.roomSelectorY++;
-            updateOffset();
-        } else if (Gdx.input.isKeyJustPressed(Keys.UP)) {
-            if (data.roomSelectorY == 0) {
-                data.floor.expandNorth();
-                data.roomSelectorY++;
-            }
-            data.roomSelectorY--;
-            updateOffset();
-        } else if (Gdx.input.isKeyJustPressed(Keys.LEFT)) {
-            if (data.roomSelectorX == 0) {
-                data.floor.expandWest();
-                data.roomSelectorX++;
-            }
-            data.roomSelectorX--;
-            updateOffset();
-        } else if (Gdx.input.isKeyJustPressed(Keys.RIGHT)) {
-            if (data.roomSelectorX == data.floor.getWidth() - 1) data.floor.expandEast();
-            data.roomSelectorX++;
-            updateOffset();
-        } else if (Gdx.input.isKeyJustPressed(Keys.MINUS)) {
-            if (data.roomRectHeight > 20) setRectSize(data.roomRectHeight - 10);
-            updateOffset();
-        } else if (Gdx.input.isKeyJustPressed(Keys.PLUS)) {
-            if (data.roomRectHeight < 200) setRectSize(data.roomRectHeight + 10);
-            updateOffset();
-        } else if (Gdx.input.isKeyJustPressed(Keys.PAGE_UP)) {
-            int numberOfFloors = data.episode.getFloors().size();
-            int currentFloorIndex = data.episode.getFloors().indexOf(data.floor);
-            if (currentFloorIndex < numberOfFloors - 1) {
-                data.floor = data.episode.getFloors().get(currentFloorIndex + 1); 
-            }
-        } else if (Gdx.input.isKeyJustPressed(Keys.PAGE_DOWN)) {
-            int currentFloorIndex = data.episode.getFloors().indexOf(data.floor);
-            if (currentFloorIndex > 0) {
-                data.floor = data.episode.getFloors().get(currentFloorIndex - 1); 
-            }
-        }
+        
         
         // Existierende Räume zeichnen
         batch.begin();
@@ -181,9 +133,115 @@ public class EditorFloorScreen implements Screen {
     public void resume() {}
 
     @Override
-    public void hide() {}
+    public void hide() {Gdx.input.setInputProcessor(null);}
 
     @Override
     public void dispose() {}
+
+    @Override
+    public boolean keyDown(int keycode) {
+        int currentFloorIndex = data.episode.getFloors().indexOf(data.floor);
+        switch (keycode) {
+        case Keys.ESCAPE:
+            game.setScreen(new EditorFloorsScreen(game, data));
+            break;
+        case Keys.ENTER:
+            if (data.floor.getRoom(data.roomSelectorX, data.roomSelectorY) == null) {
+                Room r = RoomFactory.wallRoom(data.episode.getRoomWidth(), data.episode.getRoomHeight());
+                data.floor.setRoom(data.roomSelectorX, data.roomSelectorY, r);                
+            }
+            data.room = data.floor.getRoom(data.roomSelectorX, data.roomSelectorY);
+            game.setScreen(new EditorRoomScreen(game, data));
+            break;
+        case Keys.DOWN:
+            if (data.roomSelectorY == data.floor.getHeight()-1) data.floor.expandSouth();
+            data.roomSelectorY++;
+            updateOffset();
+            break;
+        case Keys.UP:
+            if (data.roomSelectorY == 0) {
+                data.floor.expandNorth();
+                data.roomSelectorY++;
+            }
+            data.roomSelectorY--;
+            updateOffset();
+            break;
+        case Keys.LEFT:
+            if (data.roomSelectorX == 0) {
+                data.floor.expandWest();
+                data.roomSelectorX++;
+            }
+            data.roomSelectorX--;
+            updateOffset();
+            break;
+        case Keys.RIGHT:
+            if (data.roomSelectorX == data.floor.getWidth() - 1) data.floor.expandEast();
+            data.roomSelectorX++;
+            updateOffset();
+            break;
+        case Keys.MINUS:
+            if (data.roomRectHeight > 20) setRectSize(data.roomRectHeight - 10);
+            updateOffset();
+            break;
+        case Keys.PLUS:
+            if (data.roomRectHeight < 200) setRectSize(data.roomRectHeight + 10);
+            updateOffset();
+            break;
+        case Keys.PAGE_UP:
+            int numberOfFloors = data.episode.getFloors().size();
+            if (currentFloorIndex < numberOfFloors - 1) {
+                data.floor = data.episode.getFloors().get(currentFloorIndex + 1); 
+            }
+            break;
+        case Keys.PAGE_DOWN:            
+            if (currentFloorIndex > 0) {
+                data.floor = data.episode.getFloors().get(currentFloorIndex - 1); 
+            }
+            break;
+        }
+        return true;
+    }
+
+    @Override
+    public boolean keyUp(int keycode) {
+        // TODO Auto-generated method stub
+        return false;
+    }
+
+    @Override
+    public boolean keyTyped(char character) {
+        // TODO Auto-generated method stub
+        return false;
+    }
+
+    @Override
+    public boolean touchDown(int screenX, int screenY, int pointer, int button) {
+        // TODO Auto-generated method stub
+        return false;
+    }
+
+    @Override
+    public boolean touchUp(int screenX, int screenY, int pointer, int button) {
+        // TODO Auto-generated method stub
+        return false;
+    }
+
+    @Override
+    public boolean touchDragged(int screenX, int screenY, int pointer) {
+        // TODO Auto-generated method stub
+        return false;
+    }
+
+    @Override
+    public boolean mouseMoved(int screenX, int screenY) {
+        // TODO Auto-generated method stub
+        return false;
+    }
+
+    @Override
+    public boolean scrolled(int amount) {
+        // TODO Auto-generated method stub
+        return false;
+    }
 
 }

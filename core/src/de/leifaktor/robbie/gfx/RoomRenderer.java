@@ -35,6 +35,7 @@ public class RoomRenderer {
             } else {
                 batch.setColor(1, 1, 1, 1);
             }
+            // Tiles
             for (int i = 0; i < l.getWidth(); i++) {
                 for (int j = 0; j < l.getHeight(); j++) {
                     t = TileGraphics.getTexture(l.getTiles()[j*l.getWidth() + i]);
@@ -47,6 +48,7 @@ public class RoomRenderer {
                     }
                 }
             }
+            // Entities
             for (Entity e: l.getEntities()) {
                 t = TileGraphics.getTexture(e);
                 if (t != null) {
@@ -97,7 +99,11 @@ public class RoomRenderer {
         mousey /= tilesize*scale;
         mousey = room.getHeight() - mousey - 1;
         if (mousex < 0 || mousex >= room.getWidth() || mousey < 0 || mousey >= room.getHeight()) return null;
-        else return new Position(mousex, mousey);
+        else return new Position(room.getLayers().get(layerIndex), mousex, mousey);
+    }
+
+    public float getTilesize() {
+        return tilesize*scale;
     }
     
 }

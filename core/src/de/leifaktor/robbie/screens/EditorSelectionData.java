@@ -18,4 +18,6 @@ public class EditorSelectionData {
     int roomRectHeight;
     int roomRectWidth;
     
+    Area area;
+    
 }

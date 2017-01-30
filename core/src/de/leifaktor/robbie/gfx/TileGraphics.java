@@ -27,6 +27,8 @@ public class TileGraphics {
     public static TextureRegion acid;
     public static TextureRegion life;
     public static TextureRegion keys[];
+    // PLAYER
+    public static TextureRegion player;
     
     public static void createTileGraphics(Tileset tileset) {
         // TILES
@@ -121,6 +123,9 @@ public class TileGraphics {
         keys[13] = tileset.getTextureRegion(13, 4);
         keys[14] = tileset.getTextureRegion(14, 4);
         keys[15] = tileset.getTextureRegion(15, 4);
+        
+        // PLAYER
+        player = tileset.getTextureRegion(0, 7);
     }
     
     public static TextureRegion getTexture(Tile tile) {
@@ -217,6 +222,10 @@ public class TileGraphics {
             }
         }
         return t;
+    }
+    
+    public static TextureRegion getPlayerTexture() {
+        return player;
     }
     
 }

@@ -62,8 +62,6 @@ public class EditorFloorsScreen implements Screen {
         }
         batch.end();
     }
-    
-
 
     @Override
     public void resize(int width, int height) {}

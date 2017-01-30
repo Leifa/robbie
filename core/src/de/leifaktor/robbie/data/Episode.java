@@ -49,5 +49,9 @@ public class Episode {
     public Position getStartingPosition() {
         return startingPosition;
     }
+    
+    public void setStartingPosition(Position p) {
+        this.startingPosition = p;
+    }
 
 }
