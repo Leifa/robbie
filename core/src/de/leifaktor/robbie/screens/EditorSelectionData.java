@@ -12,6 +12,9 @@ public class EditorSelectionData {
     public Room room;
     public RoomLayer layer;
     
+    // for EditorFloorsScreen
+    int floorSelector;
+    
     // for EditorFloorScreen
     int roomSelectorX;
     int roomSelectorY;    
