@@ -126,9 +126,7 @@ public class IO {
                 jsonData = jsonData.next();
                 int z = jsonData.asInt();
                 jsonData = jsonData.next();
-                String roomJson = jsonData.toString();
-                roomJson = roomJson.substring(roomJson.indexOf('{'));
-                Room room = json.fromJson(Room.class, roomJson);
+                Room room = json.readValue(Room.class, jsonData);
                 rooms.setRoom(z, x, y, room);
                 jsonData = jsonData.parent();
                 while (jsonData.next() != null) {
@@ -140,9 +138,7 @@ public class IO {
                     jsonData = jsonData.next();
                     z = jsonData.asInt();
                     jsonData = jsonData.next();
-                    roomJson = jsonData.toString();
-                    roomJson = roomJson.substring(roomJson.indexOf('{'));
-                    room = json.fromJson(Room.class, roomJson);
+                    room = json.readValue(Room.class, jsonData);
                     rooms.setRoom(z, x, y, room);
                     jsonData = jsonData.parent();
                 }

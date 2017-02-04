@@ -108,6 +108,7 @@ public class EditorRoomScreen implements Screen, InputProcessor {
         } else {
             entityPaletteRenderer.render(batch);
         }
+        game.font.setColor(1, 1, 1, 1);
         game.font.draw(batch, "ESC: back", 30, 785);
         game.font.draw(batch, "L: new layer above", 230, 785);
         game.font.draw(batch, "K: new layer below", 230, 765);
