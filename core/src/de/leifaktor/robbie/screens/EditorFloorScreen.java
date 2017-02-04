@@ -95,6 +95,8 @@ public class EditorFloorScreen implements Screen, InputProcessor {
                     roomRenderer.setLayer(r.getLayers().size()-1);
                     roomRenderer.render(batch);
                 }
+                game.font.setColor(1, 0.5f, 0.5f, 1);
+                game.font.draw(batch, (i+minx) + " / " + (j+miny), x+i*data.roomRectWidth+3, y+j*data.roomRectHeight+17);
             }
         }
         batch.end();
