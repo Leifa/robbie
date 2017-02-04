@@ -3,9 +3,9 @@ package de.leifaktor.robbie.gfx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
-import de.leifaktor.robbie.data.Position;
 import de.leifaktor.robbie.data.Room;
 import de.leifaktor.robbie.data.RoomLayer;
+import de.leifaktor.robbie.data.XYPos;
 import de.leifaktor.robbie.data.entities.Entity;
 
 public class RoomRenderer {
@@ -91,7 +91,7 @@ public class RoomRenderer {
         this.y = y;
     }
     
-    public Position getClickPosition(int mousex, int mousey) {
+    public XYPos getClickPosition(int mousex, int mousey) {
         if (room == null) return null;
         mousex -= x;
         mousex /= tilesize*scale;
@@ -99,7 +99,7 @@ public class RoomRenderer {
         mousey /= tilesize*scale;
         mousey = room.getHeight() - mousey - 1;
         if (mousex < 0 || mousex >= room.getWidth() || mousey < 0 || mousey >= room.getHeight()) return null;
-        else return new Position(room.getLayers().get(layerIndex), mousex, mousey);
+        else return new XYPos(mousex, mousey);
     }
 
     public float getTilesize() {

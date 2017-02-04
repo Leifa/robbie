@@ -74,7 +74,7 @@ public class EditorScreen extends ScreenAdapter {
                     "S : Episode speichern",
                     "L : Episode Laden");
             if (Gdx.input.isKeyJustPressed(Keys.F)) {
-                game.setScreen(new EditorFloorsScreen(game, data));
+                game.setScreen(new EditorFloorScreen(game, data));
             } else if (Gdx.input.isKeyJustPressed(Keys.S)) {
                 showSavingDialog();
             } else if (Gdx.input.isKeyJustPressed(Keys.L)) {

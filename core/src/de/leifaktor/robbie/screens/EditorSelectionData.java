@@ -1,14 +1,13 @@
 package de.leifaktor.robbie.screens;
 
 import de.leifaktor.robbie.data.Episode;
-import de.leifaktor.robbie.data.Floor;
 import de.leifaktor.robbie.data.Room;
 import de.leifaktor.robbie.data.RoomLayer;
 
 public class EditorSelectionData {
 
     public Episode episode;
-    public Floor floor;
+    public int floor;
     public Room room;
     public RoomLayer layer;
     

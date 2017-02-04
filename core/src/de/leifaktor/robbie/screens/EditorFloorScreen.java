@@ -12,6 +12,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import de.leifaktor.robbie.RobbieMain;
 import de.leifaktor.robbie.data.Room;
 import de.leifaktor.robbie.data.RoomFactory;
+import de.leifaktor.robbie.data.RoomManager;
 import de.leifaktor.robbie.gfx.RoomRenderer;
 
 public class EditorFloorScreen implements Screen, InputProcessor {
@@ -22,10 +23,19 @@ public class EditorFloorScreen implements Screen, InputProcessor {
 
     EditorSelectionData data;
     RobbieMain game;
-    
+
     SpriteBatch batch;
     ShapeRenderer shaper;
     RoomRenderer roomRenderer;
+
+    RoomManager rooms; // A reference to the room manager, just for convenience.
+
+    int minx;  // the lowest x coordinate to draw
+    int miny;  // the lowest y coordinate to draw
+    int maxx;  // the highest x coordinate to draw
+    int maxy;  // the highest y coordinate to draw
+    int width;  // the number of columns to draw
+    int height;  // the number of rows to draw
 
     public EditorFloorScreen(RobbieMain game, EditorSelectionData data) {
         this.game = game;
@@ -34,6 +44,7 @@ public class EditorFloorScreen implements Screen, InputProcessor {
 
     @Override
     public void show() {
+        rooms = data.episode.getRooms();
         batch = new SpriteBatch();
         shaper = new ShapeRenderer();
         roomRenderer = new RoomRenderer(16);
@@ -43,13 +54,25 @@ public class EditorFloorScreen implements Screen, InputProcessor {
         } else {
             setRectSize(data.roomRectHeight);
         }
-        if (data.roomSelectorX >= data.floor.getWidth() || data.roomSelectorY >= data.floor.getHeight()) {
+
+        // If roomSelectors are out of bounds for this floor, adjust.
+        if (rooms.doesFloorExist(data.floor)) {
+            if (data.roomSelectorX > rooms.getMaxX(data.floor) || data.roomSelectorX < rooms.getMinX(data.floor)) {
+                data.roomSelectorX = rooms.getMinX(data.floor);
+            }
+            if (data.roomSelectorY > rooms.getMaxY(data.floor) || data.roomSelectorY < rooms.getMinY(data.floor)) {
+                data.roomSelectorY = rooms.getMinY(data.floor);
+            }
+        } else {
             data.roomSelectorX = 0;
             data.roomSelectorY = 0;
         }
+
+        calculateRowsAndColumns();
+        updateOffset();
         Gdx.input.setInputProcessor(this);
     }
-    
+
     private void setRectSize(int height) {
         data.roomRectHeight = height;
         data.roomRectWidth = (int) (data.episode.getRoomWidth() / ((float) data.episode.getRoomHeight()) * data.roomRectHeight);
@@ -61,65 +84,84 @@ public class EditorFloorScreen implements Screen, InputProcessor {
         Gdx.gl.glClearColor(0.3f, 0.3f, 0.3f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-        
-        
         // Existierende Räume zeichnen
         batch.begin();
-        if (data.floor != null) {
-            for (int i = 0; i < data.floor.getWidth(); i++) {
-                for (int j = 0; j < data.floor.getHeight(); j++) {
-                    Room r = data.floor.getRoom(i, j);
-                    if (r != null) {
-                        roomRenderer.setRoom(r);
-                        roomRenderer.setPosition(x+i*data.roomRectWidth, y+(data.floor.getHeight()-1-j)*data.roomRectHeight);
-                        roomRenderer.setLayer(r.getLayers().size()-1);
-                        roomRenderer.render(batch);
-                    }
+        for (int i = 0; i < width; i++) {
+            for (int j = 0; j < height; j++) {
+                Room r = rooms.getRoom(data.floor, i + minx, j+miny);
+                if (r != null) {
+                    roomRenderer.setRoom(r);
+                    roomRenderer.setPosition(x+i*data.roomRectWidth, y+j*data.roomRectHeight);
+                    roomRenderer.setLayer(r.getLayers().size()-1);
+                    roomRenderer.render(batch);
                 }
             }
         }
         batch.end();
+
         // Rechtecke für nicht existierende Räume zeichnen und Auswahlbox zeichnen
         shaper.begin(ShapeType.Line);
         shaper.setColor(1, 0, 0, 1);
-        if (data.floor != null) {
-            for (int i = 0; i < data.floor.getWidth(); i++) {
-                for (int j = 0; j < data.floor.getHeight(); j++) {
-                    Room r = data.floor.getRoom(i, j);
-                    if (r == null) {
-                        shaper.setColor(0.7f, 0.7f, 0.7f, 1);
-                        shaper.rect(x+i*data.roomRectWidth, y+(data.floor.getHeight()-1-j)*data.roomRectHeight, data.roomRectWidth-1, data.roomRectHeight-1);
-                    }
-                    if (i == data.roomSelectorX && j == data.roomSelectorY) {
-                        shaper.setColor(0, 1, 0, 0.2f);
-                        shaper.rect(x+i*data.roomRectWidth, y+(data.floor.getHeight()-1-j)*data.roomRectHeight, data.roomRectWidth-1, data.roomRectHeight-1);
-                        shaper.rect(x+i*data.roomRectWidth+1, y+(data.floor.getHeight()-1-j)*data.roomRectHeight+1, data.roomRectWidth-3, data.roomRectHeight-3);
-                    }                    
+        for (int i = 0; i < width; i++) {
+            for (int j = 0; j < height; j++) {
+                Room r = rooms.getRoom(data.floor, i+minx, j+miny);
+                if (r == null) {
+                    shaper.setColor(0.7f, 0.7f, 0.7f, 1);
+                    shaper.rect(x+i*data.roomRectWidth, y+j*data.roomRectHeight, data.roomRectWidth-1, data.roomRectHeight-1);
                 }
+                if (i+minx == data.roomSelectorX && j+miny == data.roomSelectorY) {
+                    shaper.setColor(0, 1, 0, 0.2f);
+                    shaper.rect(x+i*data.roomRectWidth, y+j*data.roomRectHeight, data.roomRectWidth-1, data.roomRectHeight-1);
+                    shaper.rect(x+i*data.roomRectWidth+1, y+j*data.roomRectHeight+1, data.roomRectWidth-3, data.roomRectHeight-3);
+                }                    
             }
         }
         shaper.end();
 
-
     }
-    
+
+    /**
+     * Finds out what part of the floor has to be drawn, so that all rooms are visible as well as
+     * the selector.
+     */
+
+    private void calculateRowsAndColumns() {
+        if (rooms.doesFloorExist(data.floor)) {
+            minx = rooms.getMinX(data.floor);
+            miny = rooms.getMinY(data.floor);
+            maxx = rooms.getMaxX(data.floor);
+            maxy = rooms.getMaxY(data.floor);
+        } else {
+            minx = 0;
+            miny = 0;
+            maxx = 0;
+            maxy = 0;
+        }
+        if (data.roomSelectorX < minx) minx = data.roomSelectorX;
+        if (data.roomSelectorX > maxx) maxx = data.roomSelectorX;
+        if (data.roomSelectorY < miny) miny = data.roomSelectorY;
+        if (data.roomSelectorY > maxy) maxy = data.roomSelectorY;
+        width = maxx - minx + 1;
+        height = maxy - miny + 1;
+    }
+
     /**
      * Makes sure that the selected room is visible on the screen, in case the floor
      * is too big to show all rooms
      */
-    
+
     private void updateOffset() {
-        if (x+(data.roomSelectorX+1)*data.roomRectWidth > Gdx.graphics.getWidth()) {
-            x = Gdx.graphics.getWidth() - (data.roomSelectorX+1)*data.roomRectWidth;
+        if (x + (data.roomSelectorX-minx+1)*data.roomRectWidth > Gdx.graphics.getWidth()) {
+            x = Gdx.graphics.getWidth() - (data.roomSelectorX-minx+1)*data.roomRectWidth;
         }
-        if (x+(data.roomSelectorX)*data.roomRectWidth < 0) {
+        if (x + (data.roomSelectorX-minx) * data.roomRectWidth < 0) {
             x = - (data.roomSelectorX)*data.roomRectWidth;
         }
-        if (y+(data.floor.getHeight()-1-data.roomSelectorY)*data.roomRectHeight < 0) {
-            y = - (data.floor.getHeight()-1-data.roomSelectorY)*data.roomRectHeight;
+        if (y + (data.roomSelectorY-miny) * data.roomRectHeight < 0) {
+            y = - (data.roomSelectorY-miny) * data.roomRectHeight;
         }
-        if (y+(data.floor.getHeight()-data.roomSelectorY)*data.roomRectHeight > Gdx.graphics.getHeight()) {
-            y = Gdx.graphics.getHeight() - (data.floor.getHeight()-data.roomSelectorY)*data.roomRectHeight;
+        if (y + (data.roomSelectorY-miny+1)*data.roomRectHeight > Gdx.graphics.getHeight()) {
+            y = Gdx.graphics.getHeight() - (data.roomSelectorY-miny+1)*data.roomRectHeight;
         }
     }
 
@@ -139,44 +181,37 @@ public class EditorFloorScreen implements Screen, InputProcessor {
     public void dispose() {}
 
     @Override
-    public boolean keyDown(int keycode) {
-        int currentFloorIndex = data.episode.getFloors().indexOf(data.floor);
+    public boolean keyDown(int keycode) {        
         switch (keycode) {
         case Keys.ESCAPE:
-            game.setScreen(new EditorFloorsScreen(game, data));
+            game.setScreen(new EditorScreen(game, data));
             break;
         case Keys.ENTER:
-            if (data.floor.getRoom(data.roomSelectorX, data.roomSelectorY) == null) {
+            if (rooms.getRoom(data.floor, data.roomSelectorX, data.roomSelectorY) == null) {
                 Room r = RoomFactory.wallRoom(data.episode.getRoomWidth(), data.episode.getRoomHeight());
-                data.floor.setRoom(data.roomSelectorX, data.roomSelectorY, r);                
+                rooms.setRoom(data.floor, data.roomSelectorX, data.roomSelectorY, r);                
             }
-            data.room = data.floor.getRoom(data.roomSelectorX, data.roomSelectorY);
+            data.room = rooms.getRoom(data.floor, data.roomSelectorX, data.roomSelectorY);
             game.setScreen(new EditorRoomScreen(game, data));
             break;
         case Keys.DOWN:
-            if (data.roomSelectorY == data.floor.getHeight()-1) data.floor.expandSouth();
-            data.roomSelectorY++;
+            data.roomSelectorY--;
+            calculateRowsAndColumns();
             updateOffset();
             break;
         case Keys.UP:
-            if (data.roomSelectorY == 0) {
-                data.floor.expandNorth();
-                data.roomSelectorY++;
-            }
-            data.roomSelectorY--;
-            updateOffset();
+            data.roomSelectorY++;
+            calculateRowsAndColumns();
+            updateOffset();            
             break;
         case Keys.LEFT:
-            if (data.roomSelectorX == 0) {
-                data.floor.expandWest();
-                data.roomSelectorX++;
-            }
             data.roomSelectorX--;
+            calculateRowsAndColumns();
             updateOffset();
             break;
         case Keys.RIGHT:
-            if (data.roomSelectorX == data.floor.getWidth() - 1) data.floor.expandEast();
             data.roomSelectorX++;
+            calculateRowsAndColumns();
             updateOffset();
             break;
         case Keys.MINUS:
@@ -188,15 +223,17 @@ public class EditorFloorScreen implements Screen, InputProcessor {
             updateOffset();
             break;
         case Keys.PAGE_UP:
-            int numberOfFloors = data.episode.getFloors().size();
-            if (currentFloorIndex < numberOfFloors - 1) {
-                data.floor = data.episode.getFloors().get(currentFloorIndex + 1); 
-            }
+            data.floor++;
+            calculateRowsAndColumns();
+            updateOffset();
             break;
         case Keys.PAGE_DOWN:            
-            if (currentFloorIndex > 0) {
-                data.floor = data.episode.getFloors().get(currentFloorIndex - 1); 
-            }
+            data.floor--;
+            calculateRowsAndColumns();
+            updateOffset();
+            break;
+        case Keys.FORWARD_DEL:
+            rooms.setRoom(data.floor, data.roomSelectorX, data.roomSelectorY, null);
             break;
         }
         return true;

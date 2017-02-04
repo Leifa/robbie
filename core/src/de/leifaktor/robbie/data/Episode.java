@@ -7,29 +7,22 @@ public class Episode {
     String name;
     int roomwidth;
     int roomheight;
-    ArrayList<Floor> floors;
-    Position startingPosition;
+    RoomManager rooms;
     
     public Episode() {
         this.name = "untitled";
         this.roomwidth = 40;
         this.roomheight = 28;
-        this.floors = new ArrayList<Floor>();
+        this.rooms = new RoomManager();
     }
     
     public Episode(int width, int height) {
         this.roomheight = height;
         this.roomwidth = width;
         this.name = "untitled";
-        this.floors = new ArrayList<Floor>();
+        this.rooms = new RoomManager();
     }
-
-    public Floor addFloor() {
-        Floor floor = new Floor(1,1);
-        floors.add(floor);
-        return floor;
-    }
-    
+  
     public String getName() {
         return name;
     }
@@ -42,16 +35,8 @@ public class Episode {
         return roomheight;
     }
     
-    public ArrayList<Floor> getFloors() {
-        return floors;
-    }
-    
-    public Position getStartingPosition() {
-        return startingPosition;
-    }
-    
-    public void setStartingPosition(Position p) {
-        this.startingPosition = p;
+    public RoomManager getRooms() {
+        return rooms;
     }
 
 }

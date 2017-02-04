@@ -11,9 +11,9 @@ import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.InputProcessor;
 
 import de.leifaktor.robbie.RobbieMain;
-import de.leifaktor.robbie.data.Position;
 import de.leifaktor.robbie.data.RoomLayer;
 import de.leifaktor.robbie.data.RoomLayerFactory;
+import de.leifaktor.robbie.data.XYPos;
 import de.leifaktor.robbie.data.entities.Entity;
 import de.leifaktor.robbie.data.tiles.Tile;
 import de.leifaktor.robbie.gfx.EntityPaletteRenderer;
@@ -48,7 +48,7 @@ public class EditorRoomScreen implements Screen, InputProcessor {
     final int PALETTE_TILESIZE = 32;
     final int PALETTE_TILES_PER_ROW = 10;
 
-    Position mousePosition;
+    XYPos mousePosition;
     
     enum State {
         EDITING,
@@ -281,7 +281,7 @@ public class EditorRoomScreen implements Screen, InputProcessor {
     }
 
     public void processClickAt(int screenX, int screenY) {
-        Position p = roomRenderer.getClickPosition(screenX, Gdx.graphics.getHeight() - screenY);
+        XYPos p = roomRenderer.getClickPosition(screenX, Gdx.graphics.getHeight() - screenY);
         switch (state) {
         case EDITING:
             if (screenX >= RENDER_PALETTE_X) { // PALETTE GEKLICKT
