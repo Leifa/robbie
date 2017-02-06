@@ -42,6 +42,7 @@ public class EditorScreen extends ScreenAdapter {
         Gdx.gl.glClearColor(0.3f, 0.3f, 0.3f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
+        game.font.setColor(1, 1, 1, 1);
         batch.begin();
         if (data.episode == null) {
             if (selectWidth) {
@@ -53,7 +54,6 @@ public class EditorScreen extends ScreenAdapter {
             }
             if (Gdx.input.isKeyJustPressed(Keys.RIGHT) && selectWidth) selectWidth = false;
             if (Gdx.input.isKeyJustPressed(Keys.LEFT) && !selectWidth) selectWidth = true;
-
 
             Misc.drawStrings(game.font, batch, 300,600,
                     "Neue Episode erstellen:",

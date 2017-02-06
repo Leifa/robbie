@@ -5,6 +5,8 @@ public class XYZPos {
     public int y;
     public int z;
     
+    public XYZPos() {} // no-arg constructor for JSON
+    
     public XYZPos(int x, int y, int z) {
         this.x = x;
         this.y = y;

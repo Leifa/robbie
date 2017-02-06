@@ -122,7 +122,11 @@ public class RoomManager {
     }
     
     public Room getRoom(int floor, int x, int y) {
-        return rooms.get(new XYZPos(x, y, floor));
+        return getRoom(new XYZPos(x, y, floor));
+    }
+    
+    public Room getRoom(XYZPos roomPosition) {
+        return rooms.get(roomPosition);
     }
     
     public int[] getFloorIndices() {

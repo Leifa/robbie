@@ -1,13 +1,12 @@
 package de.leifaktor.robbie.data;
 
-import java.util.ArrayList;
-
 public class Episode {
     
     String name;
     int roomwidth;
     int roomheight;
     RoomManager rooms;
+    Position startingPosition;
     
     public Episode() {
         this.name = "untitled";
@@ -37,6 +36,14 @@ public class Episode {
     
     public RoomManager getRooms() {
         return rooms;
+    }
+    
+    public void setStartingPosition(Position startingPosition) {
+        this.startingPosition = startingPosition;
+    }
+    
+    public Position getStartingPosition() {
+        return startingPosition;
     }
 
 }

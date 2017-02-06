@@ -183,7 +183,7 @@ public class EditorFloorScreen implements Screen, InputProcessor {
     public void dispose() {}
 
     @Override
-    public boolean keyDown(int keycode) {        
+    public boolean keyDown(int keycode) {
         switch (keycode) {
         case Keys.ESCAPE:
             game.setScreen(new EditorScreen(game, data));
@@ -204,7 +204,7 @@ public class EditorFloorScreen implements Screen, InputProcessor {
         case Keys.UP:
             data.roomSelectorY++;
             calculateRowsAndColumns();
-            updateOffset();            
+            updateOffset();
             break;
         case Keys.LEFT:
             data.roomSelectorX--;

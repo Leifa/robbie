@@ -11,9 +11,11 @@ import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.InputProcessor;
 
 import de.leifaktor.robbie.RobbieMain;
+import de.leifaktor.robbie.data.Position;
 import de.leifaktor.robbie.data.RoomLayer;
 import de.leifaktor.robbie.data.RoomLayerFactory;
 import de.leifaktor.robbie.data.XYPos;
+import de.leifaktor.robbie.data.XYZPos;
 import de.leifaktor.robbie.data.entities.Entity;
 import de.leifaktor.robbie.data.tiles.Tile;
 import de.leifaktor.robbie.gfx.EntityPaletteRenderer;
@@ -54,7 +56,8 @@ public class EditorRoomScreen implements Screen, InputProcessor {
         EDITING,
         COPY1,
         COPY2,
-        PASTE
+        PASTE,
+        SET_START
     }
     
     int x1, y1; // position beim kopieren merken
@@ -71,6 +74,7 @@ public class EditorRoomScreen implements Screen, InputProcessor {
         batch = new SpriteBatch();
         roomRenderer = new RoomRenderer(16);
         roomRenderer.setRoom(data.room);
+        roomRenderer.setEpisode(data.episode);
         roomRenderer.setWidth(RENDER_ROOM_WIDTH);
         roomRenderer.setGrayLayers(false);
         tilePaletteRenderer = new TilePaletteRenderer();
@@ -90,7 +94,7 @@ public class EditorRoomScreen implements Screen, InputProcessor {
 
     private void setActiveLayerIndex(int index) {
         roomRenderer.setLayer(index);
-        data.layer = data.room.getLayers().get(index);
+        data.layer = index;
     }
 
     @Override
@@ -122,7 +126,7 @@ public class EditorRoomScreen implements Screen, InputProcessor {
         game.font.draw(batch, "B: brush size = " + ((2*brushSize)-1), 830, 765);
         game.font.draw(batch,
                 "Layer " + 
-                        (data.room.getLayers().indexOf(data.layer)+1) + 
+                        (data.layer+1) + 
                         " / " + 
                         data.room.getLayers().size(),
                         30,
@@ -130,7 +134,7 @@ public class EditorRoomScreen implements Screen, InputProcessor {
         if (mousePosition != null) {
             game.font.draw(batch,
                     "(" + mousePosition.x + ", " + mousePosition.y + ") : "
-                    + data.layer.getTiles()[mousePosition.x + data.room.getWidth()*mousePosition.y],
+                    + data.room.getLayers().get(data.layer).getTiles()[mousePosition.x + data.room.getWidth()*mousePosition.y],
                     30,
                     680);
         }
@@ -148,24 +152,25 @@ public class EditorRoomScreen implements Screen, InputProcessor {
         // Frame around selection when copying
         if (state == State.COPY2) {
             if (mousePosition != null) {
-                int x1 = this.x1;
-                int y1 = this.y1;
-                int x2 = mousePosition.x;
-                int y2 = mousePosition.y;
-                if (x1 > x2) {int t=x2; x2=x1; x1=t;}
-                if (y2 > y1) {int t=y1; y1=y2; y2=t;}
-                System.out.println(x1 + " " + y1 + " " + x2 + " " + y2);
-                y1 = data.room.getHeight() - y1 - 1;
-                y2 = data.room.getHeight() - y2 - 1;
-                float tilesize = roomRenderer.getTilesize();
-                float w = (x2-x1+1)*tilesize;
-                float h = (y2-y1+1)*tilesize;
-                shapeRenderer.setColor(0,1,0,1);
-                shapeRenderer.rect(x1*tilesize, y1*tilesize, w,h);
-                shapeRenderer.rect(x1*tilesize+1, y1*tilesize+1, w-2,h-2);
+                drawFrameOnRoom(x1, y1, mousePosition.x, mousePosition.y);
+            }
+        } else if (state == State.PASTE) {
+            if (mousePosition != null) {
+                drawFrameOnRoom(mousePosition.x,  mousePosition.y, mousePosition.x + data.area.getWidth() - 1, mousePosition.y + data.area.getHeight() - 1);
             }
         }
         shapeRenderer.end();
+    }
+    
+    private void drawFrameOnRoom(int x1, int y1, int x2, int y2) {
+        if (x1 > x2) {int t=x2; x2=x1; x1=t;}
+        if (y1 > y2) {int t=y1; y1=y2; y2=t;}
+        float tilesize = roomRenderer.getTilesize();
+        float w = (x2-x1+1)*tilesize;
+        float h = (y2-y1+1)*tilesize;
+        shapeRenderer.setColor(0,1,0,1);
+        shapeRenderer.rect(x1*tilesize, y1*tilesize, w,h);
+        shapeRenderer.rect(x1*tilesize+1, y1*tilesize+1, w-2,h-2);
     }
 
     @Override
@@ -187,39 +192,33 @@ public class EditorRoomScreen implements Screen, InputProcessor {
 
     @Override
     public boolean keyDown(int keycode) {
-        int index;
         RoomLayer newLayer;
         switch (keycode) {
         case Keys.ESCAPE:
             game.setScreen(new EditorFloorScreen(game, data));
             break;
         case Keys.L:
-            index = data.room.getLayers().indexOf(data.layer);
             newLayer = RoomLayerFactory.transparentLayer(data.room.getWidth(), data.room.getHeight());
-            data.room.getLayers().add(index+1, newLayer);
-            setActiveLayerIndex(index+1);
+            data.room.getLayers().add(data.layer+1, newLayer);
+            setActiveLayerIndex(data.layer+1);
             break;
         case Keys.K:
-            index = data.room.getLayers().indexOf(data.layer);
             newLayer = RoomLayerFactory.transparentLayer(data.room.getWidth(), data.room.getHeight());
-            data.room.getLayers().add(index, newLayer);
-            setActiveLayerIndex(index);
+            data.room.getLayers().add(data.layer, newLayer);
+            setActiveLayerIndex(data.layer);
             break;
-        case Keys.D:
-            index = data.room.getLayers().indexOf(data.layer);
+        case Keys.D:            
             data.room.getLayers().remove(data.layer);
             if (data.room.getLayers().size() == 0) {
                 data.room.getLayers().add(RoomLayerFactory.emptyLayer(data.room.getWidth(), data.room.getHeight()));
             }
-            if (index > 0) index--;
-            setActiveLayerIndex(index);
+            if (data.layer > 0) data.layer--;
+            setActiveLayerIndex(data.layer);
         case Keys.PAGE_UP:
-            index = data.room.getLayers().indexOf(data.layer);
-            if (index < data.room.getLayers().size() - 1) setActiveLayerIndex(index+1);
+            if (data.layer < data.room.getLayers().size() - 1) setActiveLayerIndex(data.layer+1);
             break;
         case Keys.PAGE_DOWN:
-            index = data.room.getLayers().indexOf(data.layer);
-            if (index > 0) setActiveLayerIndex(index-1);
+            if (data.layer > 0) setActiveLayerIndex(data.layer-1);
             break;
         case Keys.T:
             roomRenderer.setGrayLayers(!roomRenderer.getGrayLayers());
@@ -236,6 +235,9 @@ public class EditorRoomScreen implements Screen, InputProcessor {
             break;
         case Keys.V:
             if (data.area != null) state = State.PASTE;
+            break;
+        case Keys.S:
+            state = State.SET_START;
             break;
         }
 
@@ -300,21 +302,21 @@ public class EditorRoomScreen implements Screen, InputProcessor {
                     if (tilePaletteActive) {
                         for (int i = p.x - brushSize + 1; i <= p.x + brushSize - 1; i++) {
                             for (int j = p.y - brushSize + 1; j <= p.y + brushSize - 1; j++) {
-                                if (i >= 0 && i < data.layer.getWidth() && j >= 0 && j < data.layer.getHeight()) {
+                                if (i >= 0 && i < data.room.getWidth() && j >= 0 && j < data.room.getHeight()) {
                                     if(leftMouseButtonPressed) {
-                                        data.layer.setTile(i, j, selectedTileLeft);
+                                        data.room.getLayers().get(data.layer).setTile(i, j, selectedTileLeft);
                                     } else {
-                                        data.layer.setTile(i, j, selectedTileRight);
+                                        data.room.getLayers().get(data.layer).setTile(i, j, selectedTileRight);
                                     }                                        
                                 }                                    
                             }
                         }                            
                     } else {
-                        data.layer.clearEntitiesAt(p.x, p.y);
+                        data.room.getLayers().get(data.layer).clearEntitiesAt(p.x, p.y);
                         if (selectedEntity != null) {
                             Entity e = selectedEntity.clone();
                             e.setPosition(p.x, p.y);
-                            data.layer.getEntities().add(e);                          
+                            data.room.getLayers().get(data.layer).getEntities().add(e);                          
                         }
                     }
                 }
@@ -329,13 +331,21 @@ public class EditorRoomScreen implements Screen, InputProcessor {
             break;
         case COPY2:            
             if (p != null) {
-                data.area = new Area(data.layer, x1,y1,p.x,p.y);
+                data.area = new Area(data.room.getLayers().get(data.layer), x1,y1,p.x,p.y);
                 state = State.EDITING;
             }
             break;
         case PASTE:
-            data.area.paste(data.layer, p.x, p.y);
+            data.area.paste(data.room.getLayers().get(data.layer), p.x, p.y);
             state = State.EDITING;
+            break;
+        case SET_START:
+            if (p != null) {
+                XYZPos roomPosition = new XYZPos(data.roomSelectorX, data.roomSelectorY, data.floor);
+                Position startingPosition = new Position(roomPosition, data.layer, p.x, p.y);
+                data.episode.setStartingPosition(startingPosition);
+                state = State.EDITING;
+            }
             break;
         }
     }

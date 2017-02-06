@@ -61,8 +61,15 @@ public class Area {
                 copy.setPosition(i, j);
                 layer.getEntities().add(copy);
             }
-        }
-        
+        }        
+    }
+    
+    public int getWidth() {
+        return width;
+    }
+    
+    public int getHeight() {
+        return height;
     }
     
 }

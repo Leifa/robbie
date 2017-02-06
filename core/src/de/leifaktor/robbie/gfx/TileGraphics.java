@@ -2,7 +2,6 @@ package de.leifaktor.robbie.gfx;
 
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
-import de.leifaktor.robbie.data.entities.Arrow;
 import de.leifaktor.robbie.data.entities.Entity;
 import de.leifaktor.robbie.data.tiles.Tile;
 
