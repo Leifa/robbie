@@ -36,9 +36,10 @@ public class EditorRoomScreen implements Screen, InputProcessor {
 
     Tile selectedTileLeft;
     Tile selectedTileRight;
-    Entity selectedEntity;
+    Entity selectedEntityLeft;
+    Entity selectedEntityRight;
     boolean leftMouseButtonPressed;
-    
+
     int brushSize = 1;
 
     boolean tilePaletteActive = true;
@@ -51,7 +52,7 @@ public class EditorRoomScreen implements Screen, InputProcessor {
     final int PALETTE_TILES_PER_ROW = 10;
 
     XYPos mousePosition;
-    
+
     enum State {
         EDITING,
         COPY1,
@@ -59,9 +60,9 @@ public class EditorRoomScreen implements Screen, InputProcessor {
         PASTE,
         SET_START
     }
-    
+
     int x1, y1; // position beim kopieren merken
-    
+
     private State state = State.EDITING;
 
     public EditorRoomScreen(RobbieMain game, EditorSelectionData data) {
@@ -101,9 +102,9 @@ public class EditorRoomScreen implements Screen, InputProcessor {
     public void render(float delta) {
         Gdx.gl.glClearColor(0.3f, 0.3f, 0.3f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-              
+
         batch.begin();
-        
+
         if (data.room != null) {
             roomRenderer.render(batch);
         }
@@ -124,6 +125,7 @@ public class EditorRoomScreen implements Screen, InputProcessor {
         game.font.draw(batch, "S: set start", 630, 765);
         game.font.draw(batch, "P: switch palette", 830, 785);
         game.font.draw(batch, "B: brush size = " + ((2*brushSize)-1), 830, 765);
+        game.font.draw(batch, "SHIFT: multiple entities", 830, 745);
         game.font.draw(batch,
                 "Layer " + 
                         (data.layer+1) + 
@@ -133,17 +135,35 @@ public class EditorRoomScreen implements Screen, InputProcessor {
                         700);
         if (mousePosition != null) {
             game.font.draw(batch,
-                    "(" + mousePosition.x + ", " + mousePosition.y + ") : "
-                    + data.room.getLayers().get(data.layer).getTiles()[mousePosition.x + data.room.getWidth()*mousePosition.y],
+                    "(" + mousePosition.x + ", " + mousePosition.y + ")",
                     30,
                     680);
+            game.font.draw(batch,
+                    "TILE: "
+                            + data.room.getLayers().get(data.layer).getTiles()[mousePosition.x + data.room.getWidth()*mousePosition.y],
+                            30,
+                            660);
+            game.font.draw(batch,
+                    "ENTITIES: "
+                            + data.room.getLayers().get(data.layer).getEntitiesAt(mousePosition.x, mousePosition.y).toString(),
+                            30,
+                            640);
         }
-        if (selectedTileLeft != null) {
-            batch.draw(TileGraphics.getTexture(selectedTileLeft), 900, 650, 64, 64);
+        if (tilePaletteActive) {
+            if (selectedTileLeft != null) {
+                batch.draw(TileGraphics.getTexture(selectedTileLeft), 900, 650, 64, 64);
+            }
+            if (selectedTileRight != null) {
+                batch.draw(TileGraphics.getTexture(selectedTileRight), 970, 650, 64, 64);
+            }
+        } else {
+            if (selectedEntityLeft != null) {
+                batch.draw(TileGraphics.getTexture(selectedEntityLeft), 900, 650, 64, 64);
+            }
+            if (selectedEntityRight != null) {
+                batch.draw(TileGraphics.getTexture(selectedEntityRight), 970, 650, 64, 64);
+            }
         }
-        if (selectedTileRight != null) {
-            batch.draw(TileGraphics.getTexture(selectedTileRight), 970, 650, 64, 64);
-        }        
         batch.end();
         shapeRenderer.begin(ShapeType.Line);
         // Line on top
@@ -161,7 +181,7 @@ public class EditorRoomScreen implements Screen, InputProcessor {
         }
         shapeRenderer.end();
     }
-    
+
     private void drawFrameOnRoom(int x1, int y1, int x2, int y2) {
         if (x1 > x2) {int t=x2; x2=x1; x1=t;}
         if (y1 > y2) {int t=y1; y1=y2; y2=t;}
@@ -279,7 +299,7 @@ public class EditorRoomScreen implements Screen, InputProcessor {
     }
 
     public boolean touchDragged(int screenX, int screenY, int pointer) {
-        processClickAt(screenX, screenY);
+        if (tilePaletteActive || !Gdx.input.isKeyPressed(Keys.SHIFT_LEFT)) processClickAt(screenX, screenY);
         return true;
     }
 
@@ -295,7 +315,11 @@ public class EditorRoomScreen implements Screen, InputProcessor {
                         selectedTileRight = tilePaletteRenderer.getTile(screenX, Gdx.graphics.getHeight() - screenY);
                     }                        
                 } else {
-                    selectedEntity = entityPaletteRenderer.getEntity(screenX, Gdx.graphics.getHeight() - screenY);
+                    if (leftMouseButtonPressed) {
+                        selectedEntityLeft = entityPaletteRenderer.getEntity(screenX, Gdx.graphics.getHeight() - screenY);
+                    } else {
+                        selectedEntityRight = entityPaletteRenderer.getEntity(screenX, Gdx.graphics.getHeight() - screenY);
+                    }
                 }
             } else { // RAUM GEKLICKT            
                 if (p != null) {
@@ -312,7 +336,8 @@ public class EditorRoomScreen implements Screen, InputProcessor {
                             }
                         }                            
                     } else {
-                        data.room.getLayers().get(data.layer).clearEntitiesAt(p.x, p.y);
+                        Entity selectedEntity = leftMouseButtonPressed ? selectedEntityLeft : selectedEntityRight;
+                        if (!Gdx.input.isKeyPressed(Keys.SHIFT_LEFT)) data.room.getLayers().get(data.layer).clearEntitiesAt(p.x, p.y);
                         if (selectedEntity != null) {
                             Entity e = selectedEntity.clone();
                             e.setPosition(p.x, p.y);
@@ -349,5 +374,5 @@ public class EditorRoomScreen implements Screen, InputProcessor {
             break;
         }
     }
-    
+
 }

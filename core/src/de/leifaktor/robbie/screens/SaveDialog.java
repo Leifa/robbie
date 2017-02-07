@@ -17,7 +17,7 @@ public class SaveDialog implements TextInputListener {
     
     @Override
     public void input(String text) {
-        FileHandle file = Gdx.files.local(text);
+        FileHandle file = Gdx.files.local("episodes/" + text);
         IO.save(episode, file);
     }
 

@@ -16,7 +16,7 @@ public class LoadDialog implements TextInputListener {
     
     @Override
     public void input(String text) {
-        FileHandle file = Gdx.files.local(text);
+        FileHandle file = Gdx.files.local("episodes/" + text);
         data.episode = IO.load(file);
     }
 
