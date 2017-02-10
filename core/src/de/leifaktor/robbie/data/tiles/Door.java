@@ -8,5 +8,9 @@ public class Door extends Tile {
         super(id);
         this.doorNumber = doorNumber;
     }
+    
+    public int getDoorNumber() {
+        return doorNumber;
+    }
 
 }

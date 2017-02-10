@@ -3,6 +3,10 @@ package de.leifaktor.robbie.data.entities;
 import de.leifaktor.robbie.data.items.Acid;
 import de.leifaktor.robbie.data.items.Key;
 import de.leifaktor.robbie.data.items.Life;
+import de.leifaktor.robbie.data.items.Magnet;
+import de.leifaktor.robbie.data.items.Notiz;
+import de.leifaktor.robbie.data.items.Shoes;
+import de.leifaktor.robbie.data.items.Shovel;
 
 public abstract class Entity {
     
@@ -32,6 +36,17 @@ public abstract class Entity {
     public static Entity key14 = new ItemEntity(21,new Key(14));
     public static Entity key15 = new ItemEntity(22,new Key(15));
     public static Entity key16 = new ItemEntity(23,new Key(16));
+    public static Entity red_wall = new RedWall(24,0);
+    public static Entity red_wall_se = new RedWall(25,1);
+    public static Entity red_wall_sw = new RedWall(26,2);
+    public static Entity red_wall_ne = new RedWall(27,3);
+    public static Entity red_wall_nw = new RedWall(28,4);
+    public static Entity magnet_1 = new ItemEntity(29,new Magnet(true));
+    public static Entity magnet_2 = new ItemEntity(30,new Magnet(false));
+    public static Entity notiz = new ItemEntity(31, new Notiz());
+    public static Entity shovel = new ItemEntity(32, new Shovel());
+    public static Entity shoes = new ItemEntity(33, new Shoes());
+    
     
     int x;
     int y;

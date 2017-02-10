@@ -18,7 +18,7 @@ import de.leifaktor.robbie.data.tiles.Tile;
 
 public class IO {
     
-    public static void save(Episode e, FileHandle file) {
+    public static void save(Episode e, FileHandle file) {        
         Json json = new Json();
         json.setTypeName("class");
         json.setUsePrototypes(false);
@@ -44,9 +44,9 @@ public class IO {
            json.writeArrayStart("tiles");
            for (int i = 0; i < layer.getTiles().length; i++) {
                if (layer.getTiles()[i] != null) {
-                   json.writeValue(layer.getTiles()[i].getType());
+                   json.writeValue(layer.getTiles()[i].getID());
                } else { // if for some reason some tiles are null, write transparent tiles instead
-                   json.writeValue(Tile.transparent.getType());
+                   json.writeValue(Tile.transparent.getID());
                }
            }
            json.writeArrayEnd();

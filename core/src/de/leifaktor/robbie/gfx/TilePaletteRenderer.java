@@ -9,7 +9,7 @@ public class TilePaletteRenderer {
 
     int tilesPerRow;
     int tileSize;
-    
+
     int x,y; // Upper left corner
 
     public void render(SpriteBatch batch) {
@@ -18,9 +18,9 @@ public class TilePaletteRenderer {
         TextureRegion t = null;
         for (int i = 0; i < Tile.tiles.length; i++) {
             t = TileGraphics.getTexture(Tile.tiles[i]);
-            if (t != null) {
+            if (t != null) {                
                 batch.draw(t, x + col*tileSize, y-tileSize - row*tileSize, tileSize, tileSize);
-            }            
+            }
             col++;
             if (col >= tilesPerRow) {
                 col = 0;
@@ -28,27 +28,27 @@ public class TilePaletteRenderer {
             }
         }
     }
-    
+
     public void setTileSize(int tileSize) {
         this.tileSize = tileSize;
     }
-    
+
     public void setTilesPerRow(int tilesPerRow) {
         this.tilesPerRow = tilesPerRow;
     }
-    
+
     public void setPosition(int x, int y) {
         this.x = x;
         this.y = y;
     }
-    
+
     /**
      * Returns the clicked Tile, given the coordinates where the mouse clicked.
      * @param mousex
      * @param mousey
      * @return
      */
-    
+
     public Tile getTile(int mousex, int mousey) {
         if (mousex < x || mousex > x+tileSize*tilesPerRow || mousey > y) {
             return null;
@@ -59,5 +59,5 @@ public class TilePaletteRenderer {
         if (index >= 0 && index < Tile.tiles.length) return Tile.tiles[index];
         else return null;
     }
-    
+
 }
