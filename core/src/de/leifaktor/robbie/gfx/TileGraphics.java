@@ -20,6 +20,7 @@ public class TileGraphics {
     public static TextureRegion glass;
     public static TextureRegion rocks[];
     public static TextureRegion water[];
+    public static TextureRegion temple[];
     // ENTITIES
     public static TextureRegion gold;
     public static TextureRegion[] arrows;
@@ -103,6 +104,15 @@ public class TileGraphics {
         water[2] = tileset.getTextureRegion("water_sand_sw");
         water[3] = tileset.getTextureRegion("water_sand_ne");
         water[4] = tileset.getTextureRegion("water_sand_nw");
+        temple = new TextureRegion[8];
+        temple[0] = tileset.getTextureRegion("temple_1");
+        temple[1] = tileset.getTextureRegion("temple_2");
+        temple[2] = tileset.getTextureRegion("temple_sand_ns");
+        temple[3] = tileset.getTextureRegion("temple_sand_ew");
+        temple[4] = tileset.getTextureRegion("temple_sand_se");
+        temple[5] = tileset.getTextureRegion("temple_sand_sw");
+        temple[6] = tileset.getTextureRegion("temple_sand_ne");
+        temple[7] = tileset.getTextureRegion("temple_sand_nw");
         
         // ENTITIES
         gold = tileset.getTextureRegion("gold");
@@ -213,6 +223,14 @@ public class TileGraphics {
             case 60: t = rocks[6]; break;
             case 61: t = rocks[7]; break;
             case 62: t = rocks[8]; break;
+            case 63: t = temple[0]; break;
+            case 64: t = temple[1]; break;
+            case 65: t = temple[2]; break;
+            case 66: t = temple[3]; break;
+            case 67: t = temple[4]; break;
+            case 68: t = temple[5]; break;
+            case 69: t = temple[6]; break;
+            case 70: t = temple[7]; break;
             }
         }
         return t;

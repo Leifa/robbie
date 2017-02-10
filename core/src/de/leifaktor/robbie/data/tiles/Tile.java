@@ -64,6 +64,14 @@ public abstract class Tile {
     public static Tile bright_rock_sand_sw = new SolidTile(60);
     public static Tile bright_rock_sand_ne = new SolidTile(61);
     public static Tile bright_rock_sand_nw = new SolidTile(62);
+    public static Tile temple_1 = new SolidTile(63);
+    public static Tile temple_2 = new SolidTile(64);
+    public static Tile temple_sand_ns = new SolidTile(65);
+    public static Tile temple_sand_ew = new SolidTile(66);
+    public static Tile temple_sand_se = new SolidTile(67);
+    public static Tile temple_sand_sw = new SolidTile(68);
+    public static Tile temple_sand_ne = new SolidTile(69);
+    public static Tile temple_sand_nw = new SolidTile(70);
     
     protected int id;
     
