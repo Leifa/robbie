@@ -18,6 +18,7 @@ public class Arrow extends Entity {
     public Entity clone() {
         Arrow a = new Arrow(this.direction);
         a.setID(this.id);
+        a.setDescription(this.description);
         return a;
     }
 

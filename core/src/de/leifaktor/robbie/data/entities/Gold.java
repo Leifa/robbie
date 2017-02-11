@@ -8,6 +8,7 @@ public class Gold extends Entity {
     public Entity clone() {
         Gold g = new Gold();
         g.setID(this.id);
+        g.setDescription(this.description);
         return g;
     }
 

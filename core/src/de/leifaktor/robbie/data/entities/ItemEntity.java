@@ -16,6 +16,7 @@ public class ItemEntity extends Entity {
     public Entity clone() {
         ItemEntity ie = new ItemEntity(item.clone());
         ie.setID(this.id);
+        ie.setDescription(this.description);
         return ie;
     }
     

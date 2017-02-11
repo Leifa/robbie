@@ -8,6 +8,7 @@ public class Elektrozaun extends Entity {
     public Entity clone() {
         Elektrozaun e = new Elektrozaun();
         e.setID(this.id);
+        e.setDescription(this.description);
         return e;
     }
 

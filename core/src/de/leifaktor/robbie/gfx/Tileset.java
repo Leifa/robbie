@@ -51,7 +51,6 @@ public class Tileset {
     }
 
     private void parseTile(String[] line) {
-        System.out.println(line[2]);
         int id = Integer.parseInt(line[1]);
         String description = line[2];
         int x = Integer.parseInt(line[3]);

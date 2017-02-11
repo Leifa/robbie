@@ -18,7 +18,7 @@ public class RobbieMain extends Game {
 	public void create () {
         this.setScreen(new EditorScreen(this));
         font = new BitmapFont();
-        Tileset tileset = new Tileset("tileset16new");
+        new Tileset("tileset16");
         frames = 0;
         accu = 0;
 	}

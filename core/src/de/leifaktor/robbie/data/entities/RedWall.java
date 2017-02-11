@@ -8,6 +8,7 @@ public class RedWall extends Entity {
     public Entity clone() {
         RedWall r = new RedWall();
         r.setID(this.id);
+        r.setDescription(this.description);
         return r;
     }
 
