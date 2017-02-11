@@ -72,6 +72,9 @@ public abstract class Tile {
     public static Tile temple_sand_sw = new SolidTile(68);
     public static Tile temple_sand_ne = new SolidTile(69);
     public static Tile temple_sand_nw = new SolidTile(70);
+    public static Tile bright_rock_1 = new SolidTile(71);
+    public static Tile bright_rock_2 = new SolidTile(72);
+    public static Tile bright_rock_path = new WalkableTile(73);
     
     protected int id;
     

@@ -88,7 +88,7 @@ public class TileGraphics {
         pyramid[7] = tileset.getTextureRegion("pyramid_s");
         pyramid[8] = tileset.getTextureRegion("pyramid_se");
         glass = tileset.getTextureRegion("glass");
-        rocks = new TextureRegion[9];
+        rocks = new TextureRegion[12];
         rocks[0] = tileset.getTextureRegion("rock");
         rocks[1] = tileset.getTextureRegion("dark_rock_sand_se");
         rocks[2] = tileset.getTextureRegion("dark_rock_sand_sw");
@@ -98,6 +98,9 @@ public class TileGraphics {
         rocks[6] = tileset.getTextureRegion("bright_rock_sand_sw");
         rocks[7] = tileset.getTextureRegion("bright_rock_sand_ne");
         rocks[8] = tileset.getTextureRegion("bright_rock_sand_nw");
+        rocks[9] = tileset.getTextureRegion("bright_rock_1");
+        rocks[10] = tileset.getTextureRegion("bright_rock_2");
+        rocks[11] = tileset.getTextureRegion("bright_rock_path");
         water = new TextureRegion[5];
         water[0] = tileset.getTextureRegion("water");
         water[1] = tileset.getTextureRegion("water_sand_se");
@@ -231,6 +234,9 @@ public class TileGraphics {
             case 68: t = temple[5]; break;
             case 69: t = temple[6]; break;
             case 70: t = temple[7]; break;
+            case 71: t = rocks[9]; break;
+            case 72: t = rocks[10]; break;
+            case 73: t = rocks[11]; break;
             }
         }
         return t;

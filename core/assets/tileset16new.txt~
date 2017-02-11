@@ -33,6 +33,9 @@ bright_rock_sand_se:6:4
 bright_rock_sand_sw:7:4
 bright_rock_sand_ne:8:4
 bright_rock_sand_nw:9:4
+bright_rock_1:10:4
+bright_rock_2:11:4
+bright_rock_path:1:4
 roof_s:0:5
 roof_e:4:5
 roof_w:5:5
