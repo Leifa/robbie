@@ -4,7 +4,7 @@ public class Notiz extends Item {
     
     String text;
     
-    public Notiz() {}
+    public Notiz() {text = "";}
 
     public Notiz(String text) {
         this.text = text;
