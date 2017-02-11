@@ -1,10 +1,10 @@
 package de.leifaktor.robbie.data.items;
 
-public class Acid extends Item {
-    
+public class Blaumann extends Item {
+
     @Override
     public Item clone() {
-        return new Acid();
+        return new Blaumann();
     }
 
 }

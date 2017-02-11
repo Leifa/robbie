@@ -4,7 +4,6 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 
-import de.leifaktor.robbie.gfx.TileGraphics;
 import de.leifaktor.robbie.gfx.Tileset;
 import de.leifaktor.robbie.screens.EditorScreen;
 
@@ -20,7 +19,6 @@ public class RobbieMain extends Game {
         this.setScreen(new EditorScreen(this));
         font = new BitmapFont();
         Tileset tileset = new Tileset("tileset16new");
-        TileGraphics.createTileGraphics(tileset);
         frames = 0;
         accu = 0;
 	}

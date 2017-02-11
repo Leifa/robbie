@@ -9,11 +9,4 @@ public class RoomFactory {
         return r;
     }
     
-    public static Room wallRoom(int width, int height) {
-        Room r = new Room(width, height);
-        RoomLayer l = RoomLayerFactory.sandLayer(width, height);
-        r.layers.add(l);
-        return r;
-    }
-    
 }

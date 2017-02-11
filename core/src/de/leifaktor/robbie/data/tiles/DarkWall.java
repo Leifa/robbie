@@ -4,8 +4,7 @@ public class DarkWall extends Tile {
     
     int walltype;
 
-    public DarkWall(int id, int walltype) {
-        super(id);
+    public DarkWall(int walltype) {
         this.walltype = walltype;
     }
     

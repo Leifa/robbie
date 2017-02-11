@@ -6,8 +6,7 @@ public class Arrow extends Entity {
     
     public Arrow(){};
     
-    public Arrow(int id, int direction) {
-        super(id);
+    public Arrow(int direction) {
         this.direction = direction;
     }
 
@@ -17,7 +16,8 @@ public class Arrow extends Entity {
 
     @Override
     public Entity clone() {
-        Arrow a = new Arrow(id, this.direction);
+        Arrow a = new Arrow(this.direction);
+        a.setID(this.id);
         return a;
     }
 

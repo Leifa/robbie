@@ -4,8 +4,9 @@ public class Water extends Tile {
     
     int type;
     
-    public Water(int id, int type) {
-        super(id);
+    public Water() {}
+    
+    public Water(int type) {
         this.type = type;
     }
     

@@ -8,14 +8,15 @@ public class ItemEntity extends Entity {
     
     public ItemEntity(){};
     
-    public ItemEntity(int id, Item item) {
-        super(id);
+    public ItemEntity(Item item) {
         this.item = item;
     }
 
     @Override
     public Entity clone() {
-        return new ItemEntity(id, item.clone());
+        ItemEntity ie = new ItemEntity(item.clone());
+        ie.setID(this.id);
+        return ie;
     }
     
     public Item getItem() {

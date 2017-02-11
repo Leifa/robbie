@@ -1,5 +1,5 @@
 tilesize=16
-sand:0:0
+0:sand:0:0:WalkableTile
 door_1:0:2
 door_2:1:2
 door_3:2:2

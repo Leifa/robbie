@@ -190,7 +190,7 @@ public class EditorFloorScreen implements Screen, InputProcessor {
             break;
         case Keys.ENTER:
             if (rooms.getRoom(data.floor, data.roomSelectorX, data.roomSelectorY) == null) {
-                Room r = RoomFactory.wallRoom(data.episode.getRoomWidth(), data.episode.getRoomHeight());
+                Room r = RoomFactory.emptyRoom(data.episode.getRoomWidth(), data.episode.getRoomHeight());
                 rooms.setRoom(data.floor, data.roomSelectorX, data.roomSelectorY, r);                
             }
             data.room = rooms.getRoom(data.floor, data.roomSelectorX, data.roomSelectorY);

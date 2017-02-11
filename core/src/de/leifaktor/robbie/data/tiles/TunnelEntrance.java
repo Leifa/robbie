@@ -4,8 +4,9 @@ public class TunnelEntrance extends Tile {
     
     int tunnelOpening;
     
-    public TunnelEntrance(int id, int tunnelOpening) {
-        super(id);
+    public TunnelEntrance() {}
+    
+    public TunnelEntrance(int tunnelOpening) {
         this.tunnelOpening = tunnelOpening;
     }
     

@@ -40,7 +40,7 @@ public class RoomRenderer {
             // Tiles
             for (int i = 0; i < l.getWidth(); i++) {
                 for (int j = 0; j < l.getHeight(); j++) {
-                    t = TileGraphics.getTexture(l.getTiles()[j*l.getWidth() + i]);
+                    t = Tileset.getTexture(l.getTiles()[j*l.getWidth() + i]);
                     if (t != null) {
                         batch.draw(t,
                                 x + i*tilesize*scale,
@@ -52,7 +52,7 @@ public class RoomRenderer {
             }
             // Entities
             for (Entity e: l.getEntities()) {
-                t = TileGraphics.getTexture(e);
+                t = Tileset.getTexture(e);
                 if (t != null) {
                     batch.draw(t,
                             x + e.getX()*tilesize*scale,
@@ -66,7 +66,7 @@ public class RoomRenderer {
                 if (episode.getStartingPosition() != null) {
                     if (episode.getRooms().getRoom(episode.getStartingPosition().roomPosition) == room) {
                         if (episode.getStartingPosition().layer == k) {
-                            t = TileGraphics.getPlayerTexture();
+                            t = Tileset.getPlayerTexture();
                             if (t != null) {
                                 batch.draw(t,
                                         x + episode.getStartingPosition().x*tilesize*scale,

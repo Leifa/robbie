@@ -3,9 +3,10 @@ package de.leifaktor.robbie.data.tiles;
 public class Sand extends Tile {
     
     int sandtype;
+    
+    public Sand() {}
 
-    public Sand(int id, int sandtype) {
-        super(id);
+    public Sand(int sandtype) {
         this.sandtype = sandtype;
     }
 

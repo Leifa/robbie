@@ -4,13 +4,11 @@ public class Elektrozaun extends Entity {
     
     public Elektrozaun() {};
     
-    public Elektrozaun(int id) {
-        super(id);
-    }
-
     @Override
     public Entity clone() {
-        return new Elektrozaun(id);
+        Elektrozaun e = new Elektrozaun();
+        e.setID(this.id);
+        return e;
     }
 
 }

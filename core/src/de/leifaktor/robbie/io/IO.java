@@ -46,7 +46,7 @@ public class IO {
                if (layer.getTiles()[i] != null) {
                    json.writeValue(layer.getTiles()[i].getID());
                } else { // if for some reason some tiles are null, write transparent tiles instead
-                   json.writeValue(Tile.transparent.getID());
+                   //json.writeValue(Tile.transparent.getID());
                }
            }
            json.writeArrayEnd();

@@ -20,8 +20,8 @@ import de.leifaktor.robbie.data.entities.Entity;
 import de.leifaktor.robbie.data.tiles.Tile;
 import de.leifaktor.robbie.gfx.EntityPaletteRenderer;
 import de.leifaktor.robbie.gfx.RoomRenderer;
-import de.leifaktor.robbie.gfx.TileGraphics;
 import de.leifaktor.robbie.gfx.TilePaletteRenderer;
+import de.leifaktor.robbie.gfx.Tileset;
 
 public class EditorRoomScreen implements Screen, InputProcessor {
 
@@ -151,17 +151,17 @@ public class EditorRoomScreen implements Screen, InputProcessor {
         }
         if (tilePaletteActive) {
             if (selectedTileLeft != null) {
-                batch.draw(TileGraphics.getTexture(selectedTileLeft), 900, 650, 64, 64);
+                batch.draw(Tileset.getTexture(selectedTileLeft), 900, 650, 64, 64);
             }
             if (selectedTileRight != null) {
-                batch.draw(TileGraphics.getTexture(selectedTileRight), 970, 650, 64, 64);
+                batch.draw(Tileset.getTexture(selectedTileRight), 970, 650, 64, 64);
             }
         } else {
             if (selectedEntityLeft != null) {
-                batch.draw(TileGraphics.getTexture(selectedEntityLeft), 900, 650, 64, 64);
+                batch.draw(Tileset.getTexture(selectedEntityLeft), 900, 650, 64, 64);
             }
             if (selectedEntityRight != null) {
-                batch.draw(TileGraphics.getTexture(selectedEntityRight), 970, 650, 64, 64);
+                batch.draw(Tileset.getTexture(selectedEntityRight), 970, 650, 64, 64);
             }
         }
         batch.end();

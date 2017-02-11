@@ -17,7 +17,7 @@ public class TilePaletteRenderer {
         int col = 0;
         TextureRegion t = null;
         for (int i = 0; i < Tile.tiles.length; i++) {
-            t = TileGraphics.getTexture(Tile.tiles[i]);
+            t = Tileset.getTexture(Tile.tiles[i]);
             if (t != null) {                
                 batch.draw(t, x + col*tileSize, y-tileSize - row*tileSize, tileSize, tileSize);
             }

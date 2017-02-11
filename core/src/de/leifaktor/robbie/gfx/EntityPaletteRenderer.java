@@ -17,7 +17,7 @@ public class EntityPaletteRenderer {
         int col = 0;
         TextureRegion t = null;
         for (int i = 0; i < Entity.entities.length; i++) {
-            t = TileGraphics.getTexture(Entity.entities[i]);
+            t = Tileset.getTexture(Entity.entities[i]);
             if (t != null) {
                 batch.draw(t, x + col*tileSize, y-tileSize - row*tileSize, tileSize, tileSize);
             }
