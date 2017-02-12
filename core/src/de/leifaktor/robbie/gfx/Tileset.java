@@ -8,6 +8,9 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import de.leifaktor.robbie.data.entities.Entity;
 import de.leifaktor.robbie.data.entities.ItemEntity;
 import de.leifaktor.robbie.data.items.Item;
+import de.leifaktor.robbie.data.items.Key;
+import de.leifaktor.robbie.data.items.Magnet;
+import de.leifaktor.robbie.data.items.Munition;
 import de.leifaktor.robbie.data.tiles.Tile;
 
 public class Tileset {
@@ -106,6 +109,9 @@ public class Tileset {
         Item item;
         try {
             item = (Item) Class.forName("de.leifaktor.robbie.data.items." + classname).newInstance();
+            if (item instanceof Munition) ((Munition) item).setNumber(Integer.parseInt(line[6]));
+            if (item instanceof Key) ((Key) item).setNumber(Integer.parseInt(line[6]));
+            if (item instanceof Magnet) ((Magnet) item).setType(Boolean.parseBoolean(line[6]));
             Entity entity = new ItemEntity(item);
             entity.setID(id);
             entity.setDescription(description);

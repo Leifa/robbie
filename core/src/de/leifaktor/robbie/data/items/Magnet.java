@@ -12,7 +12,11 @@ public class Magnet extends Item {
 
     @Override
     public Item clone() {
-        return null;
+        return new Magnet(positive);
+    }
+
+    public void setType(boolean positive) {
+        this.positive = positive;        
     }
 
 }

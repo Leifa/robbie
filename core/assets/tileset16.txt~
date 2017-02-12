@@ -116,9 +116,9 @@ E:36:red_wall_sw:2:11:RedWall
 E:37:red_wall_ne:3:11:RedWall
 E:38:red_wall_nw:4:11:RedWall
 I:39:munition_1:8:11:Munition:1
-I:40:munition_2:9:11:Munition:2
-I:41:munition_3:10:11:Munition:3
-I:42:munition_4:11:11:Munition:4
-I:43:munition_5:12:11:Munition:5
-I:44:munition_6:13:11:Munition:6
+I:40:munition_1:9:11:Munition:2
+I:41:munition_1:10:11:Munition:3
+I:42:munition_1:11:11:Munition:4
+I:43:munition_1:12:11:Munition:5
+I:44:munition_1:13:11:Munition:6
 P:6:11
