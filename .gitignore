@@ -71,3 +71,13 @@ Thumbs.db
 
 ## Unsere
 desktop/episodes/
+
+## Alles außer source
+settings.gradle
+gradlew.bat
+gradlew
+gradle.properties
+build.gradle
+gradle/
+desktop/build.gradle
+core/build.gradle
