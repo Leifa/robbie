@@ -21,7 +21,7 @@ public class EditorFloorScreen implements Screen, InputProcessor {
     int x;
     int y;
 
-    EditorSelectionData data;
+    EditorData data;
     RobbieMain game;
 
     SpriteBatch batch;
@@ -37,7 +37,7 @@ public class EditorFloorScreen implements Screen, InputProcessor {
     int width;  // the number of columns to draw
     int height;  // the number of rows to draw
 
-    public EditorFloorScreen(RobbieMain game, EditorSelectionData data) {
+    public EditorFloorScreen(RobbieMain game, EditorData data) {
         this.game = game;
         this.data = data;
     }
@@ -81,6 +81,8 @@ public class EditorFloorScreen implements Screen, InputProcessor {
 
     @Override
     public void render(float delta) {
+        data.autoBackup.update(delta);
+        
         Gdx.gl.glClearColor(0.3f, 0.3f, 0.3f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 

@@ -32,9 +32,9 @@ public class RobbieMain extends Game {
 	    accu += Gdx.graphics.getDeltaTime();
         while (accu > 1) {
             accu--;
-            System.out.println("FPS: " + frames);
+            //Gdx.app.log("RobbieMain", "FPS: " + frames);
             frames = 0;
-        }
+        }        
 	}
 	
 	@Override

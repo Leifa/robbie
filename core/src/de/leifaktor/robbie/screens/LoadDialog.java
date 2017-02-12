@@ -8,9 +8,9 @@ import de.leifaktor.robbie.io.IO;
 
 public class LoadDialog implements TextInputListener {
     
-    EditorSelectionData data;
+    EditorData data;
   
-    public LoadDialog(EditorSelectionData data) {
+    public LoadDialog(EditorData data) {
         this.data = data;
     }
     

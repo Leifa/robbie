@@ -3,6 +3,7 @@ package de.leifaktor.robbie.io;
 import java.util.Iterator;
 import java.util.Map.Entry;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.JsonValue;
@@ -17,6 +18,16 @@ import de.leifaktor.robbie.data.entities.Entity;
 import de.leifaktor.robbie.data.tiles.Tile;
 
 public class IO {
+    
+    public static void save(Episode e, String filename) {
+        FileHandle fh = Gdx.files.local(filename);
+        save(e, fh);
+    }
+    
+    public static Episode load(String filename) {
+        FileHandle fh = Gdx.files.local(filename);
+        return load(fh);
+    }
     
     public static void save(Episode e, FileHandle file) {        
         Json json = new Json();

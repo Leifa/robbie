@@ -14,7 +14,7 @@ public class EditorScreen extends ScreenAdapter {
 
     SpriteBatch batch;
 
-    EditorSelectionData data;
+    EditorData data;
 
     RobbieMain game;
 
@@ -24,10 +24,11 @@ public class EditorScreen extends ScreenAdapter {
 
     public EditorScreen(RobbieMain game) {
         this.game = game;
-        data = new EditorSelectionData();
+        data = new EditorData();
+        if (data.autoBackup == null) data.autoBackup = new AutoBackup(data);
     }
 
-    public EditorScreen(RobbieMain game, EditorSelectionData data) {
+    public EditorScreen(RobbieMain game, EditorData data) {
         this.game = game;
         this.data = data;
     }
@@ -39,9 +40,11 @@ public class EditorScreen extends ScreenAdapter {
 
     @Override
     public void render(float delta) {
+        data.autoBackup.update(delta);
+        
         Gdx.gl.glClearColor(0.3f, 0.3f, 0.3f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-
+        
         game.font.setColor(1, 1, 1, 1);
         batch.begin();
         if (data.episode == null) {
@@ -59,11 +62,14 @@ public class EditorScreen extends ScreenAdapter {
                     "Neue Episode erstellen:",
                     "Raumbreite/höhe: " + widthSelector + " / " + heightSelector,
                     "N : Episode erstellen",
-                    "L : Episode Laden");
+                    "L : Episode laden",
+                    "B : Letztes Backup laden");
             if (Gdx.input.isKeyJustPressed(Keys.N)) {
                 data.episode = new Episode(widthSelector, heightSelector);
             } else if (Gdx.input.isKeyJustPressed(Keys.L)) {
                 showLoadingDialog();
+            } else if (Gdx.input.isKeyJustPressed(Keys.B)) {
+                data.autoBackup.loadLatestBackup();
             }
         } else {
             Misc.drawStrings(game.font, batch, 300,600,
@@ -72,13 +78,16 @@ public class EditorScreen extends ScreenAdapter {
                     "Raumhöhe: " + data.episode.getRoomHeight(),
                     "F : Floors ansehen",
                     "S : Episode speichern",
-                    "L : Episode Laden");
+                    "L : Episode Laden",
+                    "B : Letztes Backup laden");
             if (Gdx.input.isKeyJustPressed(Keys.F)) {
                 game.setScreen(new EditorFloorScreen(game, data));
             } else if (Gdx.input.isKeyJustPressed(Keys.S)) {
                 showSavingDialog();
             } else if (Gdx.input.isKeyJustPressed(Keys.L)) {
                 showLoadingDialog();
+            } else if (Gdx.input.isKeyJustPressed(Keys.B)) {
+                data.autoBackup.loadLatestBackup();
             }
         }
         batch.end();

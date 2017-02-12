@@ -3,8 +3,9 @@ package de.leifaktor.robbie.screens;
 import de.leifaktor.robbie.data.Episode;
 import de.leifaktor.robbie.data.Room;
 
-public class EditorSelectionData {
+public class EditorData {
 
+    // ModelData
     public Episode episode;
     public int floor;
     public Room room;
@@ -16,6 +17,10 @@ public class EditorSelectionData {
     int roomRectHeight;
     int roomRectWidth;
     
+    // Clipboard
     Area area;
+    
+    // Reference to the AutoBackup
+    AutoBackup autoBackup;
     
 }
