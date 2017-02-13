@@ -1,4 +1,4 @@
-package de.leifaktor.robbie.screens;
+package de.leifaktor.robbie.editor;
 
 import java.util.ArrayList;
 import java.util.List;

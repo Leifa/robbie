@@ -1,23 +1,24 @@
-package de.leifaktor.robbie.screens;
+package de.leifaktor.robbie.editor;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.TextInputListener;
 import com.badlogic.gdx.files.FileHandle;
 
+import de.leifaktor.robbie.data.Episode;
 import de.leifaktor.robbie.io.IO;
 
-public class LoadDialog implements TextInputListener {
+public class SaveDialog implements TextInputListener {
     
-    EditorData data;
+    Episode episode;
   
-    public LoadDialog(EditorData data) {
-        this.data = data;
+    public SaveDialog(Episode e) {
+        this.episode = e;
     }
     
     @Override
     public void input(String text) {
         FileHandle file = Gdx.files.local("episodes/" + text);
-        data.episode = IO.load(file);
+        IO.save(episode, file);
     }
 
     @Override

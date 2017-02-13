@@ -1,4 +1,4 @@
-package de.leifaktor.robbie.screens;
+package de.leifaktor.robbie.editor;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;

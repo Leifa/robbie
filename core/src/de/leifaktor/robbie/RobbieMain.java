@@ -4,8 +4,8 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 
+import de.leifaktor.robbie.editor.EditorScreen;
 import de.leifaktor.robbie.gfx.Tileset;
-import de.leifaktor.robbie.screens.EditorScreen;
 
 public class RobbieMain extends Game {
 

@@ -1,4 +1,4 @@
-package de.leifaktor.robbie.screens;
+package de.leifaktor.robbie.editor;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;

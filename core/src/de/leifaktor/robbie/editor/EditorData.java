@@ -1,4 +1,4 @@
-package de.leifaktor.robbie.screens;
+package de.leifaktor.robbie.editor;
 
 import de.leifaktor.robbie.data.Episode;
 import de.leifaktor.robbie.data.Room;
