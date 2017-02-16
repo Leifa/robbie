@@ -16,10 +16,10 @@ import de.leifaktor.robbie.data.tiles.Tile;
 public class Tileset {
 
     public static TextureRegion missing;
+    public static int tilesize;
 
     String filename;
     Texture texture;
-    int tilesize;
 
     private static TextureRegion[] tileTextures;
     private static TextureRegion[] entityTextures;

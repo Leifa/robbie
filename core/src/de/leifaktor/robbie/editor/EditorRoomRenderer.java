@@ -1,4 +1,4 @@
-package de.leifaktor.robbie.gfx;
+package de.leifaktor.robbie.editor;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -8,8 +8,9 @@ import de.leifaktor.robbie.data.Room;
 import de.leifaktor.robbie.data.RoomLayer;
 import de.leifaktor.robbie.data.XYPos;
 import de.leifaktor.robbie.data.entities.Entity;
+import de.leifaktor.robbie.gfx.Tileset;
 
-public class RoomRenderer {
+public class EditorRoomRenderer {
     
     private int tilesize;
     private Episode episode;
@@ -20,7 +21,7 @@ public class RoomRenderer {
     
     private boolean grayLayers;
     
-    public RoomRenderer(int tilesize) {
+    public EditorRoomRenderer(int tilesize) {
         this.tilesize = tilesize;
     }
 

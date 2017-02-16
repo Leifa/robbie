@@ -19,14 +19,13 @@ import de.leifaktor.robbie.data.XYZPos;
 import de.leifaktor.robbie.data.entities.Entity;
 import de.leifaktor.robbie.data.tiles.Tile;
 import de.leifaktor.robbie.gfx.EntityPaletteRenderer;
-import de.leifaktor.robbie.gfx.RoomRenderer;
 import de.leifaktor.robbie.gfx.TilePaletteRenderer;
 import de.leifaktor.robbie.gfx.Tileset;
 
 public class EditorRoomScreen implements Screen, InputProcessor {
 
     SpriteBatch batch;
-    RoomRenderer roomRenderer;
+    EditorRoomRenderer roomRenderer;
     ShapeRenderer shapeRenderer;
     TilePaletteRenderer tilePaletteRenderer;
     EntityPaletteRenderer entityPaletteRenderer;
@@ -73,7 +72,7 @@ public class EditorRoomScreen implements Screen, InputProcessor {
     @Override
     public void show() {
         batch = new SpriteBatch();
-        roomRenderer = new RoomRenderer(16);
+        roomRenderer = new EditorRoomRenderer(16);
         roomRenderer.setRoom(data.room);
         roomRenderer.setEpisode(data.episode);
         roomRenderer.setWidth(RENDER_ROOM_WIDTH);

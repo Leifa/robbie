@@ -22,5 +22,14 @@ public class EditorData {
     
     // Reference to the AutoBackup
     AutoBackup autoBackup;
+
+    public void reset() {
+       episode = null;
+       floor = 0;
+       room = null;
+       layer = 0;
+       roomSelectorX = 0;
+       roomSelectorY = 0;
+    }
     
 }

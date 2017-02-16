@@ -15,12 +15,12 @@ public class RobbieMain extends Game {
 	float accu;
 	
 	@Override
-	public void create () {
-        this.setScreen(new EditorScreen(this));
+	public void create () {        
         font = new BitmapFont();
         new Tileset("tileset16");
         frames = 0;
         accu = 0;
+        this.setScreen(new EditorScreen(this));
 	}
 
 	@Override

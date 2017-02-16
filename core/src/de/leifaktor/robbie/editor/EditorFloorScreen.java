@@ -13,7 +13,6 @@ import de.leifaktor.robbie.RobbieMain;
 import de.leifaktor.robbie.data.Room;
 import de.leifaktor.robbie.data.RoomFactory;
 import de.leifaktor.robbie.data.RoomManager;
-import de.leifaktor.robbie.gfx.RoomRenderer;
 
 public class EditorFloorScreen implements Screen, InputProcessor {
 
@@ -26,7 +25,7 @@ public class EditorFloorScreen implements Screen, InputProcessor {
 
     SpriteBatch batch;
     ShapeRenderer shaper;
-    RoomRenderer roomRenderer;
+    EditorRoomRenderer roomRenderer;
 
     RoomManager rooms; // A reference to the room manager, just for convenience.
 
@@ -47,7 +46,7 @@ public class EditorFloorScreen implements Screen, InputProcessor {
         rooms = data.episode.getRooms();
         batch = new SpriteBatch();
         shaper = new ShapeRenderer();
-        roomRenderer = new RoomRenderer(16);
+        roomRenderer = new EditorRoomRenderer(16);
         roomRenderer.setGrayLayers(false);
         if (data.roomRectHeight == 0) {
             setRectSize(90);
