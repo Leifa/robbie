@@ -1,5 +1,7 @@
 package de.leifaktor.robbie.data.tiles;
 
+import de.leifaktor.robbie.data.entities.Entity;
+
 public abstract class Tile {
     
     public static Tile[] tiles = new Tile[256];   
@@ -31,5 +33,9 @@ public abstract class Tile {
     public void setDescription(String description) {
         this.description = description;        
     }
+    
+    public boolean isWalkable(Entity e) {
+        return true;
+    };
 
 }

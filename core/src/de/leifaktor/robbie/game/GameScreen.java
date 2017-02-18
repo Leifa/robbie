@@ -10,7 +10,10 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 
 import de.leifaktor.robbie.RobbieMain;
 import de.leifaktor.robbie.data.Episode;
+import de.leifaktor.robbie.data.Position;
 import de.leifaktor.robbie.data.Room;
+import de.leifaktor.robbie.data.entities.Entity;
+import de.leifaktor.robbie.data.entities.Player;
 import de.leifaktor.robbie.gfx.Tileset;
 
 public class GameScreen extends ScreenAdapter {
@@ -22,8 +25,12 @@ public class GameScreen extends ScreenAdapter {
     OrthographicCamera camera;
     Viewport viewport;
     GameRoomRenderer roomRenderer;
-    
-    Room currentRoom;
+
+    RuntimeRoom currentRoom;    
+    RuntimeEntity player;
+
+    float accu;
+    final float oneFrame = 1 / 60f;
 
     public GameScreen(RobbieMain game, Episode episode) {
         this.game = game;
@@ -39,24 +46,45 @@ public class GameScreen extends ScreenAdapter {
         camera.position.set(roomWidth / 2, roomHeight / 2, 0);
         viewport = new FitViewport(roomWidth, roomHeight, camera);
 
-        int scaleHeight = Gdx.graphics.getDisplayMode().height / (roomHeight*tilesize);
-        int scaleWidth = Gdx.graphics.getDisplayMode().width / (roomWidth*tilesize);
+        // Set window size
+        int scaleHeight = (Gdx.graphics.getDisplayMode().height-30) / (roomHeight*tilesize);
+        int scaleWidth = (Gdx.graphics.getDisplayMode().width-30) / (roomWidth*tilesize);
         int scale = (scaleHeight < scaleWidth) ? scaleHeight : scaleWidth;
-
         Gdx.graphics.setWindowedMode(roomWidth*tilesize*scale, roomHeight*tilesize*scale);
         Gdx.graphics.setResizable(true);
 
-        currentRoom = episode.getRooms().getRoom(episode.getStartingPosition().roomPosition);
-        roomRenderer = new GameRoomRenderer(currentRoom);
+        Position pos = episode.getStartingPosition();        
+        Entity pl = new Player();
+        pl.setPosition(pos.x, pos.y);
+        player = new RuntimeEntity(pl);
+        player.setController(new KeyboardController(player));
+        currentRoom = new RuntimeRoom(episode.getRooms().getRoom(pos.roomPosition));
+        currentRoom.setPlayer(player, pos);
+
+        roomRenderer = new GameRoomRenderer(currentRoom);      
     }
 
     @Override
     public void show() {
-        super.show();
-    };
+        accu = 0;
+    }
 
     @Override
     public void render(float delta) {
+        accu += delta;
+        while (accu > oneFrame) {
+            accu -= oneFrame;
+            tick();
+        }
+        draw();
+    }
+    
+    private void tick() {
+        currentRoom.continueMovement();
+        currentRoom.update();
+    }
+    
+    private void draw() {
         Gdx.gl20.glClearColor(0, 0, 0, 1);
         Gdx.gl20.glClear(GL20.GL_COLOR_BUFFER_BIT);
         camera.update();

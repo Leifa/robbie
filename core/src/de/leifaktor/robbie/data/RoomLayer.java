@@ -60,6 +60,10 @@ public class RoomLayer {
             }
         }
     }
+
+    public Tile getTile(int x, int y) {        
+        return tiles[width*y + x];
+    }
     
     
 }
