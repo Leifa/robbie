@@ -77,7 +77,7 @@ public class RuntimeEntity {
                     tryStartWalkingTowards(direction, layer);
                 }
             }
-        }
+        }        
     }
     
     private void tryStartWalkingTowards(int direction, RuntimeLayer layer) {

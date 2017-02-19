@@ -85,6 +85,7 @@ public class GameScreen extends ScreenAdapter {
     }
     
     private void draw() {
+        setMaxRenderLayer();
         Gdx.gl20.glClearColor(0, 0, 0, 1);
         Gdx.gl20.glClear(GL20.GL_COLOR_BUFFER_BIT);
         camera.update();
@@ -92,6 +93,19 @@ public class GameScreen extends ScreenAdapter {
         batch.begin();
         roomRenderer.render(batch);
         batch.end();
+    }
+
+    private void setMaxRenderLayer() {
+        int playerx = player.entity.getX();
+        int playery = player.entity.getY();
+        int playerLayer = currentRoom.playerLayer;
+        int maxRenderLayer = currentRoom.layers.length - 1;
+        for (int i = maxRenderLayer; i > playerLayer; i--) {
+            if (currentRoom.layers[i].layer.getTile(playerx, playery).getID() != 1) {
+                maxRenderLayer = i-1;
+            }
+        }
+        roomRenderer.setMaxRenderLayer(maxRenderLayer);        
     }
 
     @Override

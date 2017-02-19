@@ -7,7 +7,7 @@ public class RuntimeRoom {
     
     public Room room;
     public RuntimeLayer[] layers;
-    public RuntimeEntity player;
+    int playerLayer;
 
     public RuntimeRoom(Room room) {
         this.room = room;        
@@ -19,8 +19,8 @@ public class RuntimeRoom {
     }
     
     public void setPlayer(RuntimeEntity player, Position pos) {
-        this.player = player;
-        layers[pos.layer].addPlayer(player);
+        this.playerLayer = pos.layer;
+        layers[playerLayer].addPlayer(player);
     }
     
     public void continueMovement() {
