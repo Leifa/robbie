@@ -45,7 +45,7 @@ public class EditorScreen extends ScreenAdapter implements InputProcessor {
     public void render(float delta) {
         data.autoBackup.update(delta);
         
-        Gdx.gl.glClearColor(0.3f, 0.3f, 0.3f, 1);
+        Gdx.gl.glClearColor(0.4f, 0.3f, 0.3f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         
         game.font.setColor(1, 1, 1, 1);
